@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aplikasi Perhitungan Diskon</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .container {
+        max-width: 400px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #218838;
+      }
+      .result {
+        margin-top: 20px;
+        font-size: 18px;
+      }
+      .error {
+        color: red;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Aplikasi Perhitungan Diskon</h2>
+      <label for="harga">Harga Barang (Rp):</label>
+      <input type="number" id="harga" placeholder="Masukkan harga barang" />
+
+      <label for="diskon">Diskon (%):</label>
+      <input
+        type="number"
+        id="diskon"
+        placeholder="Masukkan persentase diskon"
+      />
+
+      <button onclick="hitungDiskon()">Hitung Diskon</button>
+
+      <div id="hasil" class="result"></div>
+    </div>
+
+    <script>
+      function hitungDiskon() {
+        const harga = parseFloat(document.getElementById("harga").value);
+        const diskon = parseFloat(document.getElementById("diskon").value);
+        const hasilDiv = document.getElementById("hasil");
+
+        hasilDiv.innerHTML = "";
+
+        // Cek apakah salah satu input tidak diisi
+        if (
+          document.getElementById("harga").value.trim() === "" ||
+          document.getElementById("diskon").value.trim() === ""
+        ) {
+          hasilDiv.innerHTML =
+            '<p class="error">Kamu belum mengisi salah satu kolom.</p>';
+          return;
+        }
+
+        // Validasi angka
+        if (isNaN(harga) || harga <= 0) {
+          hasilDiv.innerHTML =
+            '<p class="error">Error: Harga harus lebih besar dari 0.</p>';
+          return;
+        }
+        if (isNaN(diskon) || diskon < 0 || diskon > 100) {
+          hasilDiv.innerHTML =
+            '<p class="error">Error: Diskon harus antara 0% hingga 100%.</p>';
+          return;
+        }
+
+        const totalDiskon = harga * (diskon / 100);
+        const totalHarga = harga - totalDiskon;
+
+        hasilDiv.innerHTML = `
+    <p>Harga Awal: Rp ${formatRupiah(harga)}</p>
+    <p>Diskon (${diskon}%): Rp ${formatRupiah(totalDiskon)}</p>
+    <p>Total Harga: Rp ${formatRupiah(totalHarga)}</p>
+  `;
+      }
+
+      // Fungsi untuk memformat angka ke format Rupiah
+      function formatRupiah(angka) {
+        return new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+        }).format(angka);
+      }
+    </script>
+  </body>
+</html>
